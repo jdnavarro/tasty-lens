@@ -1,7 +1,10 @@
 name:                smallcheck-lens
 version:             0.1
 synopsis:            Smallcheck tests for lens laws
--- description:
+description:
+  A collection of properties that can be tested with @SmallCheck@, to guarantee
+  that you are working with valid @Lens@es, @Setter@s, @Traversal@s, @Iso@s and
+  @Prism@s.
 homepage:            https://github.com/jdnavarro/smallcheck-lens
 bug-reports:         https://github.com/jdnavarro/smallcheck-lens/issues
 license:             BSD3
