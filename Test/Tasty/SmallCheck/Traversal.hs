@@ -4,14 +4,16 @@
 module Test.Tasty.SmallCheck.Traversal where
 
 import Control.Lens
-import Test.SmallCheck.Series -- (Series)
+import Test.SmallCheck.Series (Serial(series), CoSerial(coseries), Series)
 import Test.Tasty (TestTree, testGroup)
 import Test.Tasty.SmallCheck (testProperty)
 
 import Test.SmallCheck.Traversal
 
 testTraversal
-  :: forall s a. (Eq s, Show s, Show a, Serial IO a, Serial Identity a, CoSerial IO a)
+  :: forall s a. ( Eq s, Show s, Show a
+                 , Serial IO a, Serial Identity a, CoSerial IO a
+                 )
   => Traversal' s a -> Series IO s -> TestTree
 testTraversal t se = testGroup "Traversal Laws"
   [ testProperty "t pure ≡ pure" $ traversePureMaybe t se

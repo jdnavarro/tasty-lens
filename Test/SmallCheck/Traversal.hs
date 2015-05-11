@@ -27,6 +27,13 @@ traverseCompose
   :: ( Monad m, Show s, Show a, Show (f a), Show (g a)
      , Applicative f, Applicative g, Eq (g (f s)), Serial Identity a
      )
-  => Traversal' s a -> Series m s -> Series m (a -> f a) -> Series m (a -> g a) -> Property m
-traverseCompose t ss fs gs = SC.over ss $ \s -> SC.over fs $ \f -> SC.over gs $ \g ->
+  => Traversal' s a
+  -> Series m s
+  -> Series m (a -> f a)
+  -> Series m (a -> g a)
+  -> Property m
+traverseCompose t ss fs gs =
+    SC.over ss $ \s ->
+        SC.over fs $ \f ->
+            SC.over gs $ \g ->
     (fmap (t f) . t g) s == (getCompose . t (Compose . fmap f . g)) s
