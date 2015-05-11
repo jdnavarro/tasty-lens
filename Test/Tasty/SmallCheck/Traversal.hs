@@ -13,11 +13,12 @@ import Test.SmallCheck.Traversal
 testTraversal
   :: forall s a. ( Eq s, Show s, Show a
                  , Serial IO a, Serial Identity a, CoSerial IO a
+                 , Serial IO s
                  )
-  => Traversal' s a -> Series IO s -> TestTree
-testTraversal t se = testGroup "Traversal Laws"
-  [ testProperty "t pure ≡ pure" $ traversePureMaybe t se
+  => Traversal' s a -> TestTree
+testTraversal t = testGroup "Traversal Laws"
+  [ testProperty "t pure ≡ pure" $ traversePureMaybe t series
   , testProperty "fmap (t f) . t g ≡ getCompose . t (Compose . fmap f . g)" $
-       traverseCompose t se (coseries series :: Series IO (a -> [a]))
-                            (coseries series :: Series IO (a -> Maybe a))
+       traverseCompose t series (coseries series :: Series IO (a -> [a]))
+                                (coseries series :: Series IO (a -> Maybe a))
   ]

@@ -21,5 +21,5 @@ testLens l = testGroup "Lens Laws"
       lensSetView l series
   , testProperty "set l (view l a) a ≡ a" $
       lensViewSet l series series
-  , testTraversal l series
+  , testTraversal l
   ]
