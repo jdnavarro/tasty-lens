@@ -9,6 +9,7 @@ import Test.Tasty (TestTree, testGroup)
 import Test.Tasty.SmallCheck (testProperty)
 
 import Test.SmallCheck.Traversal
+import Test.Tasty.SmallCheck.Setter
 
 testTraversal
   :: forall s a. ( Eq s, Show s, Show a
@@ -21,4 +22,5 @@ testTraversal t = testGroup "Traversal Laws"
   , testProperty "fmap (t f) . t g ≡ getCompose . t (Compose . fmap f . g)" $
        traverseCompose t series (coseries series :: Series IO (a -> [a]))
                                 (coseries series :: Series IO (a -> Maybe a))
+  , testSetter t
   ]
