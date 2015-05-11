@@ -1,8 +1,12 @@
+{-# LANGUAGE CPP #-}
 {-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE RankNTypes #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 module Test.SmallCheck.Traversal where
 
+#if !MIN_VERSION_base(4,8,0)
+import Control.Applicative (Applicative, pure)
+#endif
 import Control.Lens
 import Data.Functor.Compose (Compose(..), getCompose)
 import Test.SmallCheck (Property)
