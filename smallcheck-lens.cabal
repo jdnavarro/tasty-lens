@@ -24,8 +24,11 @@ library
   default-language:    Haskell2010
   ghc-options:         -Wall
   exposed-modules:     Test.SmallCheck.Setter
+                       Test.SmallCheck.Traversal
                        Test.Tasty.SmallCheck.Setter
+                       Test.Tasty.SmallCheck.Traversal
   build-depends:       base >=4.6 && <4.9,
+                       transformers,
                        lens,
                        smallcheck >= 1.1,
                        tasty,
