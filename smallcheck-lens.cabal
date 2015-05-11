@@ -23,8 +23,10 @@ source-repository head
 library
   default-language:    Haskell2010
   ghc-options:         -Wall
-  exposed-modules:     Test.SmallCheck.Setter
+  exposed-modules:     Test.SmallCheck.Lens
+                       Test.SmallCheck.Setter
                        Test.SmallCheck.Traversal
+                       Test.Tasty.SmallCheck.Lens
                        Test.Tasty.SmallCheck.Setter
                        Test.Tasty.SmallCheck.Traversal
   build-depends:       base >=4.6 && <4.9,
