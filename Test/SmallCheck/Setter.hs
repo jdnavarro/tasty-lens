@@ -12,7 +12,7 @@ setterId
 setterId l se = SC.over se $ \s -> over l id s == s
 
 setterComposition
-  :: (Eq s, Show s, Show a, Serial m a, Serial Identity a)
+  :: (Monad m, Eq s, Show s, Show a, Serial Identity a)
   => ASetter' s a
   -> Series m s
   -> Series m (a -> a)
@@ -25,7 +25,7 @@ setterComposition l ss fs gs =
     over l f (over l g s) == over l (f . g) s
 
 setterSetSet
-  :: (Eq s, Show s, Show a, Serial m a)
+  :: (Monad m, Eq s, Show s, Show a)
   => ASetter' s a -> Series m s -> Series m a -> Series m a -> Property m
 setterSetSet l ss as bs =
     SC.over ss $ \s ->
