@@ -11,7 +11,7 @@ main = defaultMain $ testGroup "Lens tests"
   ]
 
 tupleTests :: TestTree
-tupleTests = testGroup "Tuple"
+tupleTests = testGroup "Tuples"
   [ testGroup "_1 :: Lens' (Char,Char) Char"
     [ testLens (_1 :: Lens' (Char,Char) Char) ]
   , testGroup "_2 :: Lens' (Char,Char,Char) Char"

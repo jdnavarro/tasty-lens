@@ -1,7 +1,6 @@
 {-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE RankNTypes #-}
 {-# LANGUAGE ScopedTypeVariables #-}
-{-# LANGUAGE NoMonomorphismRestriction #-}
 module Test.Tasty.SmallCheck.Traversal where
 
 import Control.Lens
@@ -21,8 +20,9 @@ testTraversal
 testTraversal t = testGroup "Traversal Laws"
   [ testProperty "t pure ≡ pure" $ traversePureMaybe t series
   , testProperty "fmap (t f) . t g ≡ getCompose . t (Compose . fmap f . g)" $
-       traverseCompose t series (coseries series' :: Series IO (a -> [a]))
-                                (coseries series' :: Series IO (a -> Maybe a))
+       traverseCompose t
+           (localDepth (\d -> d - 3) series)
+           (localDepth (const 2) $ coseries series :: Series IO (a -> [a]))
+           (localDepth (const 2) $ coseries series :: Series IO (a -> Maybe a))
   , testSetter t
   ]
-    where series' = localDepth (\d -> d - 4) series

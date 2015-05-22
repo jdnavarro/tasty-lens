@@ -1,5 +1,4 @@
 {-# LANGUAGE FlexibleContexts #-}
-{-# LANGUAGE NoMonomorphismRestriction #-}
 module Test.Tasty.SmallCheck.Setter where
 
 import Control.Lens
@@ -20,6 +19,8 @@ testSetter l = testGroup "Setter Laws"
       setterSetSet l series series series
   , testProperty "over l id ≡ id" $ setterId l series
   , testProperty "over l f . over l g ≡ over l (f . g)" $
-      setterComposition l series' (coseries series') (coseries series')
+      setterComposition l
+          (localDepth (\d -> d - 3) series)
+          (localDepth (const 2) $ coseries series)
+          (localDepth (const 2) $ coseries series)
   ]
-    where series' = localDepth (\d -> d - 4) series
