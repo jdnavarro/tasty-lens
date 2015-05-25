@@ -28,6 +28,7 @@ library
                        Test.SmallCheck.Prism
                        Test.SmallCheck.Setter
                        Test.SmallCheck.Traversal
+                       Test.Tasty.SmallCheck.Iso
                        Test.Tasty.SmallCheck.Lens
                        Test.Tasty.SmallCheck.Prism
                        Test.Tasty.SmallCheck.Setter
