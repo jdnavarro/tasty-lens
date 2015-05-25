@@ -36,6 +36,7 @@ library
                        transformers,
                        lens,
                        smallcheck >= 1.1,
+                       smallcheck-series >=0.3,
                        tasty,
                        tasty-smallcheck
 

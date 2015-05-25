@@ -12,6 +12,7 @@ import Data.Functor.Compose (Compose(..), getCompose)
 import Test.SmallCheck (Property)
 import qualified Test.SmallCheck as SC (over)
 import Test.SmallCheck.Series (Serial, Series)
+import Test.SmallCheck.Series.Utils (zipLogic3)
 
 traversePure
   :: forall m f s a. (Monad m, Show s, Applicative f, Eq (f s))
@@ -32,8 +33,5 @@ traverseCompose
   -> Series m (a -> f a)
   -> Series m (a -> g a)
   -> Property m
-traverseCompose t ss fs gs =
-    SC.over ss $ \s ->
-        SC.over fs $ \f ->
-            SC.over gs $ \g ->
+traverseCompose t ss fs gs = SC.over (zipLogic3 ss fs gs) $ \(s,f,g) ->
     (fmap (t f) . t g) s == (getCompose . t (Compose . fmap f . g)) s

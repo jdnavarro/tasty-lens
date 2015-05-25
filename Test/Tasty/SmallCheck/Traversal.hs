@@ -4,7 +4,7 @@
 module Test.Tasty.SmallCheck.Traversal where
 
 import Control.Lens
-import Test.SmallCheck.Series (Serial(series), CoSerial(coseries), Series, localDepth)
+import Test.SmallCheck.Series (Serial(series), CoSerial, Series)
 import Test.Tasty (TestTree, testGroup)
 import Test.Tasty.SmallCheck (testProperty)
 
@@ -20,9 +20,7 @@ testTraversal
 testTraversal t = testGroup "Traversal Laws"
   [ testProperty "t pure ≡ pure" $ traversePureMaybe t series
   , testProperty "fmap (t f) . t g ≡ getCompose . t (Compose . fmap f . g)" $
-       traverseCompose t
-           (localDepth (\d -> d - 3) series)
-           (localDepth (const 2) $ coseries series :: Series IO (a -> [a]))
-           (localDepth (const 2) $ coseries series :: Series IO (a -> Maybe a))
+       traverseCompose t series (series :: Series IO (a -> [a]))
+                                (series :: Series IO (a -> Maybe a))
   , testSetter t
   ]

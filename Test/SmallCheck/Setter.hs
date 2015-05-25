@@ -5,6 +5,7 @@ import Control.Lens
 import Test.SmallCheck (Property)
 import qualified Test.SmallCheck as SC (over)
 import Test.SmallCheck.Series (Series, Serial)
+import Test.SmallCheck.Series.Utils (zipLogic3)
 
 setterId
   :: (Eq s, Monad m, Show s)
@@ -18,10 +19,7 @@ setterComposition
   -> Series m (a -> a)
   -> Series m (a -> a)
   -> Property m
-setterComposition l ss fs gs =
-    SC.over ss $ \s ->
-        SC.over fs $ \f ->
-            SC.over gs $ \g ->
+setterComposition l ss fs gs = SC.over (zipLogic3 ss fs gs) $ \(s,f,g) ->
     over l f (over l g s) == over l (f . g) s
 
 setterSetSet
