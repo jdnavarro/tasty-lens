@@ -1,14 +1,14 @@
 {-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE RankNTypes #-}
-module Test.Tasty.SmallCheck.Iso where
+module Test.Tasty.SmallCheck.Lens.Iso where
 
 import Control.Lens
 import Test.SmallCheck.Series (Serial(series), CoSerial)
 import Test.Tasty (TestTree, testGroup)
 import Test.Tasty.SmallCheck (testProperty)
 
-import Test.SmallCheck.Iso
-import Test.Tasty.SmallCheck.Lens
+import Test.SmallCheck.Lens.Iso
+import Test.Tasty.SmallCheck.Lens.Lens
 
 testIso
   :: ( Eq s, Eq a, Show s, Show a

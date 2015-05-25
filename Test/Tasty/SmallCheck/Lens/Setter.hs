@@ -1,12 +1,12 @@
 {-# LANGUAGE FlexibleContexts #-}
-module Test.Tasty.SmallCheck.Setter where
+module Test.Tasty.SmallCheck.Lens.Setter where
 
 import Control.Lens
 import Test.SmallCheck.Series (Serial(series), CoSerial)
 import Test.Tasty (TestTree, testGroup)
 import Test.Tasty.SmallCheck (testProperty)
 
-import Test.SmallCheck.Setter
+import Test.SmallCheck.Lens.Setter
 
 testSetter
   :: ( Eq s, Show s, Show a

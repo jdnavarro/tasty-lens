@@ -23,16 +23,16 @@ source-repository head
 library
   default-language:    Haskell2010
   ghc-options:         -Wall
-  exposed-modules:     Test.SmallCheck.Iso
-                       Test.SmallCheck.Lens
-                       Test.SmallCheck.Prism
-                       Test.SmallCheck.Setter
-                       Test.SmallCheck.Traversal
-                       Test.Tasty.SmallCheck.Iso
-                       Test.Tasty.SmallCheck.Lens
-                       Test.Tasty.SmallCheck.Prism
-                       Test.Tasty.SmallCheck.Setter
-                       Test.Tasty.SmallCheck.Traversal
+  exposed-modules:     Test.SmallCheck.Lens.Iso
+                       Test.SmallCheck.Lens.Lens
+                       Test.SmallCheck.Lens.Prism
+                       Test.SmallCheck.Lens.Setter
+                       Test.SmallCheck.Lens.Traversal
+                       Test.Tasty.SmallCheck.Lens.Iso
+                       Test.Tasty.SmallCheck.Lens.Lens
+                       Test.Tasty.SmallCheck.Lens.Prism
+                       Test.Tasty.SmallCheck.Lens.Setter
+                       Test.Tasty.SmallCheck.Lens.Traversal
   build-depends:       base >=4.6 && <4.9,
                        transformers,
                        lens,

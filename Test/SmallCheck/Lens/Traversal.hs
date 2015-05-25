@@ -2,7 +2,7 @@
 {-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE RankNTypes #-}
 {-# LANGUAGE ScopedTypeVariables #-}
-module Test.SmallCheck.Traversal where
+module Test.SmallCheck.Lens.Traversal where
 
 #if !MIN_VERSION_base(4,8,0)
 import Control.Applicative (Applicative, pure)

@@ -1,5 +1,5 @@
 {-# LANGUAGE FlexibleContexts #-}
-module Test.SmallCheck.Setter where
+module Test.SmallCheck.Lens.Setter where
 
 import Control.Lens
 import Test.SmallCheck (Property)

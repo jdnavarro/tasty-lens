@@ -1,5 +1,5 @@
 {-# LANGUAGE RankNTypes #-}
-module Test.SmallCheck.Prism where
+module Test.SmallCheck.Lens.Prism where
 
 import Control.Lens
 import Test.SmallCheck (Property)

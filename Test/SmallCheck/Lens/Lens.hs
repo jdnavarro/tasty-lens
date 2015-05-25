@@ -1,5 +1,5 @@
 {-# LANGUAGE RankNTypes #-}
-module Test.SmallCheck.Lens where
+module Test.SmallCheck.Lens.Lens where
 
 import Control.Lens
 import Test.SmallCheck (Property)

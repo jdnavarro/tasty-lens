@@ -1,5 +1,5 @@
 {-# LANGUAGE RankNTypes #-}
-module Test.SmallCheck.Iso where
+module Test.SmallCheck.Lens.Iso where
 
 import Control.Lens
 import Test.SmallCheck (Property)

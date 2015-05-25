@@ -1,14 +1,14 @@
 {-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE RankNTypes #-}
-module Test.Tasty.SmallCheck.Lens where
+module Test.Tasty.SmallCheck.Lens.Lens where
 
 import Control.Lens
 import Test.SmallCheck.Series (Serial(series), CoSerial)
 import Test.Tasty (TestTree, testGroup)
 import Test.Tasty.SmallCheck (testProperty)
 
-import Test.SmallCheck.Lens
-import Test.Tasty.SmallCheck.Traversal
+import Test.SmallCheck.Lens.Lens
+import Test.Tasty.SmallCheck.Lens.Traversal
 
 testLens
   :: ( Eq s, Eq a, Show s, Show a

@@ -1,15 +1,15 @@
 {-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE RankNTypes #-}
 {-# LANGUAGE ScopedTypeVariables #-}
-module Test.Tasty.SmallCheck.Traversal where
+module Test.Tasty.SmallCheck.Lens.Traversal where
 
 import Control.Lens
 import Test.SmallCheck.Series (Serial(series), CoSerial, Series)
 import Test.Tasty (TestTree, testGroup)
 import Test.Tasty.SmallCheck (testProperty)
 
-import Test.SmallCheck.Traversal
-import Test.Tasty.SmallCheck.Setter
+import Test.SmallCheck.Lens.Traversal
+import Test.Tasty.SmallCheck.Lens.Setter
 
 testTraversal
   :: forall s a. ( Eq s, Show s, Show a
