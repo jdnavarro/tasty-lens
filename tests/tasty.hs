@@ -4,9 +4,7 @@ import Control.Lens
 import Numeric.Lens (hex, negated, adding)
 import Test.Tasty (TestTree, defaultMain, testGroup)
 
-import Test.Tasty.SmallCheck.Lens.Iso
-import Test.Tasty.SmallCheck.Lens.Lens
-import Test.Tasty.SmallCheck.Lens.Prism
+import Test.Tasty.SmallCheck.Lens
 
 main :: IO ()
 main = defaultMain $ testGroup "Lens tests"

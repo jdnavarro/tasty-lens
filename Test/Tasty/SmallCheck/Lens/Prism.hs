@@ -10,6 +10,12 @@ import Test.Tasty.SmallCheck (testProperty)
 import Test.SmallCheck.Lens.Prism
 import Test.Tasty.SmallCheck.Lens.Traversal
 
+-- | A 'Prism'' is only legal if it is a valid 'Traversal'' (see
+--   'testTraversal'), and if the following laws hold:
+--
+-- 1. @preview l (review l b) ≡ Just b"@
+--
+-- 2. @maybe s (review l) (preview l s) ≡ s@
 testPrism
   :: ( Eq s, Eq a, Show s, Show a
      , Serial IO a, Serial Identity a, CoSerial IO a

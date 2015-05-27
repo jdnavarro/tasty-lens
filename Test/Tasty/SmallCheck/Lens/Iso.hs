@@ -10,6 +10,14 @@ import Test.Tasty.SmallCheck (testProperty)
 import Test.SmallCheck.Lens.Iso
 import Test.Tasty.SmallCheck.Lens.Lens
 
+-- | An 'Iso'' is only legal if the following laws hold:
+--
+-- 1. @s ^. l . from l ≡ s@
+--
+-- 2. @s ^. from l . l ≡ s@
+--
+-- An 'Iso'' is also a valid 'Lens'' in both normal and reverse form. Check
+-- 'testLens'.
 testIso
   :: ( Eq s, Eq a, Show s, Show a
      , Serial IO a, Serial Identity a, CoSerial IO a

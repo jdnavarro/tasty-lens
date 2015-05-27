@@ -11,6 +11,12 @@ import Test.Tasty.SmallCheck (testProperty)
 import Test.SmallCheck.Lens.Traversal
 import Test.Tasty.SmallCheck.Lens.Setter
 
+-- | A 'Traversal'' is only legal if it is a valid 'Setter'' (see
+-- 'testSetter'), and if the following laws hold:
+--
+-- 1. @t pure ≡ pure@
+--
+-- 2. @fmap (t f) . t g ≡ getCompose . t (Compose . fmap f . g)@
 testTraversal
   :: forall s a. ( Eq s, Show s, Show a
                  , Serial IO a, Serial Identity a, CoSerial IO a

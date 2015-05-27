@@ -10,6 +10,14 @@ import Test.Tasty.SmallCheck (testProperty)
 import Test.SmallCheck.Lens.Lens
 import Test.Tasty.SmallCheck.Lens.Traversal
 
+-- | A 'Lens'' is only legal if it is a valid 'Traversal'' (see
+--   'testTraversal'), and if the following laws hold:
+--
+-- 1. @view l (set l b a)  ≡ b@
+--
+-- 2. @set l (view l a) a  ≡ a@
+--
+-- 3. @set l c (set l b a) ≡ set l c a@
 testLens
   :: ( Eq s, Eq a, Show s, Show a
      , Serial IO a, Serial Identity a, CoSerial IO a
