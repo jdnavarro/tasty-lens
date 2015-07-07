@@ -17,13 +17,13 @@ tupleTests :: TestTree
 tupleTests = testGroup "Tuples"
   [ testGroup "_1"
     [ testGroup "Lens' (Char,Char) Char"
-        [ testLens (_1 :: Lens' (Char,Char) Char) ]
+      [ testLens (_1 :: Lens' (Char,Char) Char) ]
     , testGroup "Lens' (Int,Char) Int"
-        [ testLens (_1 :: Lens' (Int,Char) Int) ]
+      [ testLens (_1 :: Lens' (Int,Char) Int) ]
     ]
   , testGroup "_2"
      [ testGroup "Lens' (Char,Char,Char) Char"
-         [ testLens (_2 :: Lens' (Char,Char,Char) Char) ]
+       [ testLens (_2 :: Lens' (Char,Char,Char) Char) ]
      ]
   ]
 
