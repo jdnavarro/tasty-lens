@@ -21,7 +21,7 @@ author:              Danny Navarro
 maintainer:          j@dannynavarro.net
 category:            Testing, Lenses
 build-type:          Simple
-extra-source-files:  README.markdown CHANGELOG.markdown
+extra-source-files:  README.markdown CHANGELOG.markdown stack.yaml
 cabal-version:       >=1.10
 
 source-repository head
