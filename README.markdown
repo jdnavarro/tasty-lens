@@ -1,16 +1,29 @@
 # Lens SmallCheck
 
-[![Hackage Version](https://img.shields.io/hackage/v/smallcheck-lens.svg)](https://hackage.haskell.org/package/smallcheck-lens) [![Build Status](https://img.shields.io/travis/jdnavarro/smallcheck-lens.svg)](https://travis-ci.org/jdnavarro/smallcheck-lens)
+[![Hackage Version](https://img.shields.io/hackage/v/tasty-lens.svg)](https://hackage.haskell.org/package/tasty-lens)
+[![Build Status](https://img.shields.io/travis/jdnavarro/tasty-lens.svg)](https://travis-ci.org/jdnavarro/tasty-lens)
 
-[`smallcheck`](https://hackage.haskell.org/package/smallcheck) properties
-ported from
-[`lens-properties`](https://hackage.haskell.org/package/lens-properties)
-and [`tasty`](https://hackage.haskell.org/package/tasty tasty) test trees
-to validate `Lens`es, `Setter`s, `Traversal`s, `Iso`s and `Prism`s.
+Preassembled [`tasty`](https://hackage.haskell.org/package/tasty) `TestTree`s
+for the validation:
 
-Most likely, you will only need the `Test.Tasty.SmallCheck.Lens` module,
-which includes test trees ready to be run.
+- `Lens`
+- `Setter`
+- `Traversal`
+- `Iso`
+- `Prism`
+
+It uses [`smallcheck-lens`](https://github.com/jdnavarro/smallcheck-laws) under
+the hood. If you don't find any `TestTree`s that suit you, try the
+`smallcheck-lens` package. You can use this package as a reference to implement
+your own `smallcheck-lens` `TestTree`s.
 
 Check the
-[tests](https://github.com/jdnavarro/smallcheck-lens/blob/master/tests/tasty.hs)
-in this package for examples.
+[tests](https://github.com/jdnavarro/tasty-lens/blob/master/tests/tasty.hs) in
+this package for examples.
+
+## Contact
+
+Contributions and bug reports are welcome!
+
+Please feel free to contact jdnavarro on the #haskell IRC channel on
+irc.freenode.net.
