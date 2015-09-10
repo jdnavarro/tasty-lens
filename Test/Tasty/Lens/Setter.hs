@@ -1,5 +1,5 @@
 {-# LANGUAGE FlexibleContexts #-}
-module Test.Tasty.SmallCheck.Lens.Setter where
+module Test.Tasty.Lens.Setter where
 
 import Control.Lens
 import Test.SmallCheck.Series (Serial(series), CoSerial)

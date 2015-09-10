@@ -9,7 +9,7 @@ explosion you can either override the default 'Test.SmallCheck.Serial'
 instances with custom ones or you can create your own tasty test trees using
 the functions at "Test.SmallCheck.Lens".
 -}
-module Test.Tasty.SmallCheck.Lens
+module Test.Tasty.Lens
   (
   -- * Test Trees
     testIso
@@ -19,8 +19,8 @@ module Test.Tasty.SmallCheck.Lens
   , testTraversal
   ) where
 
-import Test.Tasty.SmallCheck.Lens.Iso
-import Test.Tasty.SmallCheck.Lens.Lens
-import Test.Tasty.SmallCheck.Lens.Prism
-import Test.Tasty.SmallCheck.Lens.Setter
-import Test.Tasty.SmallCheck.Lens.Traversal
+import Test.Tasty.Lens.Iso
+import Test.Tasty.Lens.Lens
+import Test.Tasty.Lens.Prism
+import Test.Tasty.Lens.Setter
+import Test.Tasty.Lens.Traversal

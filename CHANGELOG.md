@@ -10,6 +10,9 @@ Versioning](http://semver.org/).
   [`smallcheck-lens-0.1`](https://hackage.haskell.org/package/smallcheck-lens-0.1).
   This package now contains `Tasty` specific modules.
 
+### Changed
+- Simplify module hierarchy: `Test.Tasty.SmallCheck.Lens` -> `Test.Tasty.Lens`
+
 ## [0.1] - 2015-05-27
 ### Added
 - `SmallCheck` properties for each lens laws.

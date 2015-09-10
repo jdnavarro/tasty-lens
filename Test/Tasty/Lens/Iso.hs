@@ -1,6 +1,6 @@
 {-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE RankNTypes #-}
-module Test.Tasty.SmallCheck.Lens.Iso where
+module Test.Tasty.Lens.Iso where
 
 import Control.Lens
 import Test.SmallCheck.Series (Serial(series), CoSerial)
