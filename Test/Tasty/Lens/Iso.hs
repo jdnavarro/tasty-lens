@@ -7,6 +7,7 @@
 module Test.Tasty.Lens.Iso
   ( test
   , testSeries
+  , testExhaustive
   , module Test.SmallCheck.Lens.Iso
   ) where
 
@@ -45,4 +46,18 @@ testSeries l ss as = testGroup "Iso Laws"
   , testProperty "s ^. from l . l ≡ s" $ yon l as
   , Lens.testSeries l ss
   , Lens.testSeries (from l) as
+  ]
+
+
+testExhaustive
+  :: ( Eq s, Eq a, Show s, Show a
+     , Serial Identity s, Serial IO s, CoSerial IO s
+     , Serial Identity a, Serial IO a, CoSerial IO a
+     )
+  => Iso' s a -> TestTree
+testExhaustive l = testGroup "Iso Laws"
+  [ testProperty "s ^. l . from l ≡ s" $ hither l series
+  , testProperty "s ^. from l . l ≡ s" $ yon l series
+  , Lens.testExhaustive l
+  , Lens.testExhaustive (from l)
   ]

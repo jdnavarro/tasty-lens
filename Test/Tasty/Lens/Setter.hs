@@ -7,6 +7,7 @@
 module Test.Tasty.Lens.Setter
   ( test
   , testSeries
+  , testExhaustive
   , module Test.SmallCheck.Lens.Setter
   ) where
 
@@ -15,7 +16,7 @@ import Test.SmallCheck.Series (Serial(series), Series)
 import Test.Tasty (TestTree, testGroup)
 import Test.Tasty.SmallCheck (testProperty)
 
-import Test.SmallCheck.Lens.Setter (identity, setSetSum, compositionSum)
+import Test.SmallCheck.Lens.Setter (identity, setSet, setSetSum, composition, compositionSum)
 
 -- | A 'Setter' is only legal if the following laws hold:
 --
@@ -50,4 +51,25 @@ testSeries l ss = testGroup "Setter Laws"
       setSetSum l ss series series
   , testProperty "over l f . over l g ≡ over l (f . g)" $
       compositionSum l ss series series
+  ]
+
+-- | A 'Setter' is only legal if the following laws hold:
+--
+-- 1. @set l y (set l x a) ≡ set l y a@
+--
+-- 2. @over l id ≡ id@
+--
+-- 3. @over l f . over l g ≡ over l (f . g)@
+testExhaustive
+  :: ( Eq s, Show s, Show a
+     , Serial IO s
+     , Serial IO a, Serial Identity a, Serial IO (a -> a)
+     )
+  => Setter' s a -> TestTree
+testExhaustive l = testGroup "Setter Laws"
+  [ testProperty "over l id ≡ id" $ identity l series
+  , testProperty "set l y (set l x a) ≡ set l y a" $
+      setSet l series series series
+  , testProperty "over l f . over l g ≡ over l (f . g)" $
+      composition l series series series
   ]

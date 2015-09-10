@@ -6,6 +6,7 @@
 --
 module Test.Tasty.Lens.Prism
   ( test
+  , testExhaustive
   , module Test.SmallCheck.Lens.Prism
   ) where
 
@@ -48,4 +49,22 @@ testSeries l ss = testGroup "Prism Laws"
   [ Traversal.testSeries (Proxy :: Proxy Maybe) l ss
   , testProperty "preview l (review l b) ≡ Just b" $ yin l series
   , testProperty "maybe s (review l) (preview l s) ≡ s" $ yang l ss
+  ]
+
+-- | A 'Prism'' is only legal if it is a valid 'Traversal'' (see
+--   'testTraversal'), and if the following laws hold:
+--
+-- 1. @preview l (review l b) ≡ Just b"@
+--
+-- 2. @maybe s (review l) (preview l s) ≡ s@
+testExhaustive
+  :: ( Eq s, Eq a, Show s, Show a
+     , Serial IO s
+     , Serial IO a, Serial Identity a, CoSerial IO a
+     )
+  => Prism' s a -> TestTree
+testExhaustive l = testGroup "Prism Laws"
+  [ Traversal.testExhaustive (Proxy :: Proxy Maybe) l
+  , testProperty "preview l (review l b) ≡ Just b" $ yin l series
+  , testProperty "maybe s (review l) (preview l s) ≡ s" $ yang l series
   ]

@@ -8,6 +8,7 @@
 module Test.Tasty.Lens.Traversal
   ( test
   , testSeries
+  , testExhaustive
   , module Test.SmallCheck.Lens.Traversal
   ) where
 
@@ -59,4 +60,28 @@ testSeries p t ss = testGroup "Traversal Laws"
        compositionSum t ss (series :: Series IO (a -> f a))
                            (series :: Series IO (a -> f a))
   , Setter.testSeries t ss
+  ]
+
+
+-- | A 'Traversal'' is only legal if it is a valid 'Setter'' (see
+-- 'testSetter'), and if the following laws hold:
+--
+-- 1. @t pure ≡ pure@
+--
+-- 2. @fmap (t f) . t g ≡ getCompose . t (Compose . fmap f . g)@
+testExhaustive
+  :: forall f s a .
+     ( Applicative f 
+     , Eq s, Eq (f s), Eq (f (f s))
+     , Show s, Show a, Show (f a)
+     , Serial IO s
+     , Serial Identity a, Serial IO a, Serial IO (f a), CoSerial IO a
+     )
+  => Proxy f -> Traversal' s a -> TestTree
+testExhaustive p t = testGroup "Traversal Laws"
+  [ testProperty "t pure ≡ pure" $ Traversal.pure p t series
+  , testProperty "fmap (t f) . t g ≡ getCompose . t (Compose . fmap f . g)" $
+       compositionSum t series (series :: Series IO (a -> f a))
+                               (series :: Series IO (a -> f a))
+  , Setter.testExhaustive t
   ]

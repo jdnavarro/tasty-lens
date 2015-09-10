@@ -7,6 +7,7 @@
 module Test.Tasty.Lens.Lens
   ( test
   , testSeries
+  , testExhaustive
   , module Test.SmallCheck.Lens.Lens
   ) where
 
@@ -55,4 +56,26 @@ testSeries l ss = testGroup "Lens Laws"
   , testProperty "set l (view l a) a ≡ a" $
       viewSet l ss series
   , Traversal.testSeries (Proxy :: Proxy Maybe) l ss
+  ]
+
+-- | A 'Lens'' is only legal if it is a valid 'Traversal'' (see
+--   'testTraversal'), and if the following laws hold:
+--
+-- 1. @view l (set l b a)  ≡ b@
+--
+-- 2. @set l (view l a) a  ≡ a@
+--
+-- 3. @set l c (set l b a) ≡ set l c a@
+testExhaustive
+  :: ( Eq s, Eq a, Show s, Show a
+     , Serial IO s
+     , Serial IO a, Serial Identity a, CoSerial IO a
+     )
+  => Lens' s a -> TestTree
+testExhaustive l = testGroup "Lens Laws"
+  [ testProperty "view l (set l b a) ≡ b" $
+      setView l series
+  , testProperty "set l (view l a) a ≡ a" $
+      viewSet l series series
+  , Traversal.testExhaustive (Proxy :: Proxy Maybe) l
   ]
