@@ -3,7 +3,7 @@ packages:
 - '.'
 - location:
     git: git@github.com:jdnavarro/smallcheck-lens
-    commit: f6ef967409e47fa9395a688b19f75f935a939104
+    commit: 73f768b993b9716d1953b72e66661b71c91969ee
 extra-deps:
 - smallcheck-lens-0.1
 - smallcheck-series-0.5.1
