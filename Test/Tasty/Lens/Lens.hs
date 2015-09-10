@@ -1,5 +1,9 @@
 {-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE RankNTypes #-}
+-- | This module is intended to be imported @qualified@, for example:
+--
+-- > import qualified Test.Tasty.Lens.Lens as Lens
+--
 module Test.Tasty.Lens.Lens where
 
 import Control.Lens
@@ -18,13 +22,13 @@ import Test.Tasty.SmallCheck.Lens.Traversal
 -- 2. @set l (view l a) a  ≡ a@
 --
 -- 3. @set l c (set l b a) ≡ set l c a@
-testLens
+test
   :: ( Eq s, Eq a, Show s, Show a
      , Serial IO a, Serial Identity a, CoSerial IO a
      , Serial IO s
      )
   => Lens' s a -> TestTree
-testLens l = testGroup "Lens Laws"
+test l = testGroup "Lens Laws"
   [ testProperty "view l (set l b a) ≡ b" $
       lensSetView l series
   , testProperty "set l (view l a) a ≡ a" $

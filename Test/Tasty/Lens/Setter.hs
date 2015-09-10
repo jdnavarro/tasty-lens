@@ -1,4 +1,8 @@
 {-# LANGUAGE FlexibleContexts #-}
+-- | This module is intended to be imported @qualified@, for example:
+--
+-- > import qualified Test.Tasty.Lens.Setter as Setter
+--
 module Test.Tasty.Lens.Setter where
 
 import Control.Lens
@@ -15,13 +19,13 @@ import Test.SmallCheck.Lens.Setter
 -- 2. @over l id ≡ id@
 --
 -- 3. @over l f . over l g ≡ over l (f . g)@
-testSetter
+test
   :: ( Eq s, Show s, Show a
      , Serial IO a, Serial Identity a, CoSerial IO a
      , Serial IO s
      )
   => ASetter' s a -> TestTree
-testSetter l = testGroup "Setter Laws"
+test l = testGroup "Setter Laws"
   [ testProperty "over l id ≡ id" $ setterId l series
   , testProperty "set l y (set l x a) ≡ set l y a" $
       setterSetSet l series series series
