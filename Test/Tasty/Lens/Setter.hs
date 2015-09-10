@@ -1,4 +1,5 @@
 {-# LANGUAGE FlexibleContexts #-}
+{-# LANGUAGE RankNTypes #-}
 -- | This module is intended to be imported @qualified@, for example:
 --
 -- > import qualified Test.Tasty.Lens.Setter as Setter
@@ -27,7 +28,7 @@ test
      , Serial IO a, Serial Identity a, CoSerial IO a
      , Serial IO s
      )
-  => ASetter' s a -> TestTree
+  => Setter' s a -> TestTree
 test l = testGroup "Setter Laws"
   [ testProperty "over l id ≡ id" $ identity l series
   , testProperty "set l y (set l x a) ≡ set l y a" $

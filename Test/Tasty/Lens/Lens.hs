@@ -9,6 +9,8 @@ module Test.Tasty.Lens.Lens
   , module Test.SmallCheck.Lens.Lens
   ) where
 
+import Data.Proxy (Proxy(..))
+
 import Control.Lens
 import Test.SmallCheck.Series (Serial(series), CoSerial)
 import Test.Tasty (TestTree, testGroup)
@@ -36,5 +38,5 @@ test l = testGroup "Lens Laws"
       setView l series
   , testProperty "set l (view l a) a ≡ a" $
       viewSet l series series
-  , Traversal.test l
+  , Traversal.test (Proxy :: Proxy Maybe) l
   ]

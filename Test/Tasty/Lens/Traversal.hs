@@ -7,11 +7,14 @@
 --
 module Test.Tasty.Lens.Traversal where
 
+import Data.Proxy (Proxy(..))
+
 import Control.Lens
 import Test.SmallCheck.Series (Serial(series), CoSerial, Series)
 import Test.Tasty (TestTree, testGroup)
 import Test.Tasty.SmallCheck (testProperty)
 
+import qualified Test.SmallCheck.Lens.Traversal as Traversal
 import Test.SmallCheck.Lens.Traversal (compositionSum)
 import qualified Test.Tasty.Lens.Setter as Setter
 
@@ -22,15 +25,18 @@ import qualified Test.Tasty.Lens.Setter as Setter
 --
 -- 2. @fmap (t f) . t g ≡ getCompose . t (Compose . fmap f . g)@
 test
-  :: forall s a. ( Eq s, Show s, Show a
-                 , Serial IO a, Serial Identity a, CoSerial IO a
-                 , Serial IO s
-                 )
-  => Traversal' s a -> TestTree
-test t = testGroup "Traversal Laws"
-  [ -- XXX: testProperty "t pure ≡ pure" $ Traversal.pure t series
-    testProperty "fmap (t f) . t g ≡ getCompose . t (Compose . fmap f . g)" $
-       compositionSum t series (series :: Series IO (a -> [a]))
-                               (series :: Series IO (a -> Maybe a))
+  :: forall f s a .
+     ( Applicative f, Eq (f s), Eq (f (f s))
+     , Eq s, Show s, Show a, Show (f a)
+     , Serial IO a, Serial Identity a, CoSerial IO a
+     , Serial IO (f a)
+     , Serial IO s
+     )
+  => Proxy f -> Traversal' s a -> TestTree
+test p t = testGroup "Traversal Laws"
+  [ testProperty "t pure ≡ pure" $ Traversal.pure p t series
+  , testProperty "fmap (t f) . t g ≡ getCompose . t (Compose . fmap f . g)" $
+       compositionSum t series (series :: Series IO (a -> f a))
+                               (series :: Series IO (a -> f a))
   , Setter.test t
   ]

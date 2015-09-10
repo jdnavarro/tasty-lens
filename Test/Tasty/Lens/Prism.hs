@@ -9,7 +9,8 @@ module Test.Tasty.Lens.Prism
   , module Test.SmallCheck.Lens.Prism
   ) where
 
-import Data.Proxy (Proxy (..))
+import Data.Proxy (Proxy(..))
+
 import Control.Lens
 import Test.SmallCheck.Series (Serial(series), CoSerial)
 import Test.Tasty (TestTree, testGroup)
