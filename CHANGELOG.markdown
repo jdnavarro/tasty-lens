@@ -4,6 +4,12 @@ follows the formatting recommendations from [Keep a
 CHANGELOG](http://keepachangelog.com/). This project adheres to [Semantic
 Versioning](http://semver.org/).
 
+[Unreleased][unreleased]
+### Removed
+- `smallcheck` specific modules from
+  [`smallcheck-lens-0.1`](https://hackage.haskell.org/package/smallcheck-lens-0.1).
+  This package now contains `Tasty` specific modules.
+
 ## [0.1] - 2015-05-27
 ### Added
 - `SmallCheck` properties for each lens laws.
