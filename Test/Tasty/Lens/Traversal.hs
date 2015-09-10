@@ -1,3 +1,4 @@
+{-# LANGUAGE CPP #-}
 {-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE RankNTypes #-}
 {-# LANGUAGE ScopedTypeVariables #-}
@@ -12,6 +13,9 @@ module Test.Tasty.Lens.Traversal
   , module Test.SmallCheck.Lens.Traversal
   ) where
 
+#if !MIN_VERSION_base(4,8,0)
+import Control.Applicative (Applicative)
+#endif
 import Data.Proxy (Proxy(..))
 
 import Control.Lens
