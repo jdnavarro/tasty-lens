@@ -4,15 +4,18 @@
 --
 -- > import qualified Test.Tasty.Lens.Lens as Lens
 --
-module Test.Tasty.Lens.Lens where
+module Test.Tasty.Lens.Lens
+  ( test
+  , module Test.SmallCheck.Lens.Lens
+  ) where
 
 import Control.Lens
 import Test.SmallCheck.Series (Serial(series), CoSerial)
 import Test.Tasty (TestTree, testGroup)
 import Test.Tasty.SmallCheck (testProperty)
 
-import Test.SmallCheck.Lens.Lens
-import Test.Tasty.SmallCheck.Lens.Traversal
+import Test.SmallCheck.Lens.Lens (setView, viewSet)
+import qualified Test.Tasty.Lens.Traversal as Traversal
 
 -- | A 'Lens'' is only legal if it is a valid 'Traversal'' (see
 --   'testTraversal'), and if the following laws hold:
@@ -30,8 +33,8 @@ test
   => Lens' s a -> TestTree
 test l = testGroup "Lens Laws"
   [ testProperty "view l (set l b a) ≡ b" $
-      lensSetView l series
+      setView l series
   , testProperty "set l (view l a) a ≡ a" $
-      lensViewSet l series series
-  , testTraversal l
+      viewSet l series series
+  , Traversal.test l
   ]

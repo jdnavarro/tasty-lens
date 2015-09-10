@@ -3,14 +3,17 @@
 --
 -- > import qualified Test.Tasty.Lens.Setter as Setter
 --
-module Test.Tasty.Lens.Setter where
+module Test.Tasty.Lens.Setter
+  ( test
+  , module Test.SmallCheck.Lens.Setter
+  ) where
 
 import Control.Lens
 import Test.SmallCheck.Series (Serial(series), CoSerial)
 import Test.Tasty (TestTree, testGroup)
 import Test.Tasty.SmallCheck (testProperty)
 
-import Test.SmallCheck.Lens.Setter
+import Test.SmallCheck.Lens.Setter (identity, setSet, compositionSum)
 
 -- | A 'Setter' is only legal if the following laws hold:
 --
@@ -26,9 +29,9 @@ test
      )
   => ASetter' s a -> TestTree
 test l = testGroup "Setter Laws"
-  [ testProperty "over l id ≡ id" $ setterId l series
+  [ testProperty "over l id ≡ id" $ identity l series
   , testProperty "set l y (set l x a) ≡ set l y a" $
-      setterSetSet l series series series
+      setSet l series series series
   , testProperty "over l f . over l g ≡ over l (f . g)" $
-      setterComposition l series series series
+      compositionSum l series series series
   ]

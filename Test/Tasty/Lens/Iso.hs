@@ -4,14 +4,17 @@
 --
 -- > import qualified Test.Tasty.Lens.Iso as Iso
 --
-module Test.Tasty.Lens.Iso where
+module Test.Tasty.Lens.Iso
+  ( test
+  , module Test.SmallCheck.Lens.Iso
+  ) where
 
 import Control.Lens
 import Test.SmallCheck.Series (Serial(series), CoSerial)
 import Test.Tasty (TestTree, testGroup)
 import Test.Tasty.SmallCheck (testProperty)
 
-import Test.SmallCheck.Lens.Iso
+import Test.SmallCheck.Lens.Iso (hither, yon)
 import qualified Test.Tasty.Lens.Lens as Lens
 
 -- | An 'Iso'' is only legal if the following laws hold:
@@ -29,8 +32,8 @@ test
      )
   => Iso' s a -> TestTree
 test l = testGroup "Iso Laws"
-  [ testProperty "s ^. l . from l ≡ s" $ isoHither l series
-  , testProperty "s ^. from l . l ≡ s" $ isoYon l series
+  [ testProperty "s ^. l . from l ≡ s" $ hither l series
+  , testProperty "s ^. from l . l ≡ s" $ yon l series
   , Lens.test l
   , Lens.test (from l)
   ]

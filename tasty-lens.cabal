@@ -30,7 +30,7 @@ library
   build-depends:       base >=4.6 && <4.9,
                        lens >=4.1.2.1,
                        smallcheck >=1.1.1,
-                       smallcheck-lens >=0.1,
+                       smallcheck-lens >=0.3,
                        tasty >=0.10,
                        tasty-smallcheck >=0.8.0.1
 

@@ -12,7 +12,7 @@ import Test.SmallCheck.Series (Serial(series), CoSerial, Series)
 import Test.Tasty (TestTree, testGroup)
 import Test.Tasty.SmallCheck (testProperty)
 
-import Test.SmallCheck.Lens.Traversal
+import Test.SmallCheck.Lens.Traversal (compositionSum)
 import qualified Test.Tasty.Lens.Setter as Setter
 
 -- | A 'Traversal'' is only legal if it is a valid 'Setter'' (see
@@ -28,9 +28,9 @@ test
                  )
   => Traversal' s a -> TestTree
 test t = testGroup "Traversal Laws"
-  [ testProperty "t pure ≡ pure" $ traversePureMaybe t series
-  , testProperty "fmap (t f) . t g ≡ getCompose . t (Compose . fmap f . g)" $
-       traverseCompose t series (series :: Series IO (a -> [a]))
-                                (series :: Series IO (a -> Maybe a))
+  [ -- XXX: testProperty "t pure ≡ pure" $ Traversal.pure t series
+    testProperty "fmap (t f) . t g ≡ getCompose . t (Compose . fmap f . g)" $
+       compositionSum t series (series :: Series IO (a -> [a]))
+                               (series :: Series IO (a -> Maybe a))
   , Setter.test t
   ]
