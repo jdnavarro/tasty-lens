@@ -46,9 +46,9 @@ testSeries
      )
   => Prism' s a -> Series IO s -> TestTree
 testSeries l ss = testGroup "Prism Laws"
-  [ Traversal.testSeries (Proxy :: Proxy Maybe) l ss
-  , testProperty "preview l (review l b) ≡ Just b" $ yin l series
+  [ testProperty "preview l (review l b) ≡ Just b" $ yin l series
   , testProperty "maybe s (review l) (preview l s) ≡ s" $ yang l ss
+  , Traversal.testSeries (Proxy :: Proxy Maybe) l ss
   ]
 
 -- | A 'Prism'' is only legal if it is a valid 'Traversal'' (see
@@ -64,7 +64,7 @@ testExhaustive
      )
   => Prism' s a -> TestTree
 testExhaustive l = testGroup "Prism Laws"
-  [ Traversal.testExhaustive (Proxy :: Proxy Maybe) l
-  , testProperty "preview l (review l b) ≡ Just b" $ yin l series
+  [ testProperty "preview l (review l b) ≡ Just b" $ yin l series
   , testProperty "maybe s (review l) (preview l s) ≡ s" $ yang l series
+  , Traversal.testExhaustive (Proxy :: Proxy Maybe) l
   ]
