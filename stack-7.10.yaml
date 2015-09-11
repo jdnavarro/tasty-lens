@@ -1,10 +1,7 @@
 flags: {}
 packages:
 - '.'
-- location:
-    git: git@github.com:jdnavarro/smallcheck-lens
-    commit: 73f768b993b9716d1953b72e66661b71c91969ee
 extra-deps:
-- smallcheck-lens-0.1
+- smallcheck-lens-0.3
 - smallcheck-series-0.5.1
 resolver: lts-3.4
