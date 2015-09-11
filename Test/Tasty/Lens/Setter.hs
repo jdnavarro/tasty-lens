@@ -5,9 +5,12 @@
 -- > import qualified Test.Tasty.Lens.Setter as Setter
 --
 module Test.Tasty.Lens.Setter
-  ( test
+  (
+  -- * Tests
+    test
   , testSeries
   , testExhaustive
+  -- * Re-exports
   , module Test.SmallCheck.Lens.Setter
   ) where
 
@@ -16,7 +19,13 @@ import Test.SmallCheck.Series (Serial(series), Series)
 import Test.Tasty (TestTree, testGroup)
 import Test.Tasty.SmallCheck (testProperty)
 
-import Test.SmallCheck.Lens.Setter (identity, setSet, setSetSum, composition, compositionSum)
+import Test.SmallCheck.Lens.Setter
+  ( identity
+  , setSet
+  , setSetSum
+  , composition
+  , compositionSum
+  )
 
 -- | A 'Setter' is only legal if the following laws hold:
 --
@@ -25,6 +34,13 @@ import Test.SmallCheck.Lens.Setter (identity, setSet, setSetSum, composition, co
 -- 2. @over l id ≡ id@
 --
 -- 3. @over l f . over l g ≡ over l (f . g)@
+--
+-- The 'Serial' and 'CoSerial' instances for @s@ and @a@. If you are
+-- not creating your own orphan instances be aware of combinatorial explosion
+-- since the default implementations usually aim for exhaustivity.
+--
+-- In this case @f@ and @g@ are of type @a -> a@ and when combining them the
+-- /sum/ of 'Series' is used.
 test
   :: ( Eq s, Show s, Show a
      , Serial IO s
@@ -40,6 +56,13 @@ test l = testSeries l series
 -- 2. @over l id ≡ id@
 --
 -- 3. @over l f . over l g ≡ over l (f . g)@
+--
+-- Here you explicitly pass a custom 'Series' for @s@, while for @a@ the
+-- @Serial@ instance is used. If you want to fine tune both 'Series', you
+-- should create your own 'TestTree'.
+--
+-- In this case @f@ and @g@ are of type @a -> a@ and when combining them the
+-- /sum/ of 'Series' is used.
 testSeries
   :: ( Eq s, Show s, Show a
      , Serial IO a, Serial Identity a, Serial IO (a -> a)
@@ -60,6 +83,9 @@ testSeries l ss = testGroup "Setter Laws"
 -- 2. @over l id ≡ id@
 --
 -- 3. @over l f . over l g ≡ over l (f . g)@
+--
+-- This is the same as 'test' except it uses the /product/ when combining the
+-- @f@ and @g@ 'Series'.
 testExhaustive
   :: ( Eq s, Show s, Show a
      , Serial IO s
