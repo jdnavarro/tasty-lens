@@ -8,6 +8,7 @@ module Test.Tasty.Lens.Prism
   (
   -- * Tests
     test
+  , testSeries
   , testExhaustive
   -- * Re-exports
   , module Test.SmallCheck.Lens.Prism

@@ -15,7 +15,7 @@ module Test.Tasty.Lens.Setter
   ) where
 
 import Control.Lens
-import Test.SmallCheck.Series (Serial(series), Series)
+import Test.SmallCheck.Series (Serial(series), Series, localDepth)
 import Test.Tasty (TestTree, testGroup)
 import Test.Tasty.SmallCheck (testProperty)
 
@@ -73,7 +73,8 @@ testSeries l ss = testGroup "Setter Laws"
   , testProperty "set l y (set l x a) ≡ set l y a" $
       setSetSum l ss series series
   , testProperty "over l f . over l g ≡ over l (f . g)" $
-      compositionSum l ss series series
+      compositionSum l ss (localDepth (const 2) series)
+                          (localDepth (const 2) series)
   ]
 
 -- | A 'Setter' is only legal if the following laws hold:

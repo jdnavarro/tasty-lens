@@ -22,7 +22,7 @@ import Control.Applicative (Applicative)
 import Data.Proxy (Proxy(..))
 
 import Control.Lens
-import Test.SmallCheck.Series (Serial(series), CoSerial, Series)
+import Test.SmallCheck.Series (Serial(series), CoSerial, Series, localDepth)
 import Test.Tasty (TestTree, testGroup)
 import Test.Tasty.SmallCheck (testProperty)
 
@@ -86,8 +86,8 @@ testSeries
 testSeries p t ss = testGroup "Traversal Laws"
   [ testProperty "t pure ≡ pure" $ Traversal.pure p t ss
   , testProperty "fmap (t f) . t g ≡ getCompose . t (Compose . fmap f . g)" $
-       compositionSum t ss (series :: Series IO (a -> f a))
-                           (series :: Series IO (a -> f a))
+       compositionSum t ss (localDepth (const 2) $ series :: Series IO (a -> f a))
+                           (localDepth (const 2) $ series :: Series IO (a -> f a))
   , Setter.testSeries t ss
   ]
 
