@@ -4,6 +4,13 @@ follows the formatting recommendations from [Keep a
 CHANGELOG](http://keepachangelog.com/). This project adheres to [Semantic
 Versioning](http://semver.org/).
 
+## [0.3.1] - 2015-09-23
+### Fixed
+- Export `Prism` `listSeries`.
+
+### Changed
+- Make `Depth` of compositing functions for `Traversal` and `Setter` constant.
+
 ## [0.3] - 2015-09-11
 ### Added
 - Multiple `TestTree`s with different settings for dealing with `SmallCheck`
@@ -23,5 +30,6 @@ Versioning](http://semver.org/).
 - `tasty` test trees for each `Lens` type.
 - Tests for some `Lens`.
 
+[0.3.1]: https://github.com/jdnavarro/tasty-lens/compare/v0.3...v0.3.1
 [0.3]: https://github.com/jdnavarro/tasty-lens/compare/v0.1...v0.3
 [0.1]: https://github.com/jdnavarro/tasty-lens/compare/1df060...v0.1

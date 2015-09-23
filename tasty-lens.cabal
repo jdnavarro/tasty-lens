@@ -1,5 +1,5 @@
 name:                tasty-lens
-version:             0.3
+version:             0.3.1
 synopsis:            Tasty TestTrees for Lens validation
 description:
   Preassembled 'tasty' 'TestTree's for property testing @Lens@es, @Setter@s,
