@@ -1,0 +1,9 @@
+[submodule "tasty-dumbcheck"]
+	path = tasty-dumbcheck
+	url = https://github.com/jdnavarro/tasty-dumbcheck
+[submodule "lens-laws"]
+	path = lens-laws
+	url = https://github.com/jdnavarro/lens-laws
+[submodule "tasty-expected-failure"]
+	path = tasty-expected-failure
+	url = https://github.com/jdnavarro/tasty-expected-failure.git

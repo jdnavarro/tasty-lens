@@ -1,8 +1,10 @@
 module Main where
 
 import Control.Lens
-import Numeric.Lens (hex, negated, adding)
+import Numeric.Lens (binary, negated, adding)
 import Test.Tasty (TestTree, defaultMain, testGroup)
+import Test.Tasty.ExpectedFailure (allowFail)
+import Test.DumbCheck -- (TestTree, defaultMain, testGroup)
 
 import qualified Test.Tasty.Lens.Iso as Iso
 import qualified Test.Tasty.Lens.Lens as Lens
@@ -45,6 +47,8 @@ maybeTests = testGroup "Maybe"
     ]
   ]
 
+type AlphaNumString = [AlphaNum]
+
 numTests :: TestTree
 numTests = testGroup "Numeric"
   [ testGroup "negated"
@@ -53,11 +57,12 @@ numTests = testGroup "Numeric"
     , testGroup "Iso' Float Float"
       [ Iso.test (negated :: Iso' Float Float) ]
     ]
-  , testGroup "hex"
+  , testGroup "binary"
     [ testGroup "Prism'' String Int"
-      [ Prism.test (hex :: Prism' String Int) ]
+      [ allowFail $ Prism.test
+                  (_AlphaNumString . (binary :: Prism' String Int)) ]
     , testGroup "Prism'' String Integer"
-      [ Prism.test (hex :: Prism' String Integer) ]
+      [ Prism.test (binary :: Prism' String Integer) ]
     ]
   , testGroup "adding"
     [ testGroup "Iso' Int Int"
@@ -66,3 +71,6 @@ numTests = testGroup "Numeric"
       [ Iso.test (adding 3 :: Iso' Integer Integer) ]
     ]
   ]
+  where
+    _AlphaNumString :: Iso' AlphaNumString String
+    _AlphaNumString = iso (fmap unAlphaNum) (fmap AlphaNum)

@@ -10,22 +10,21 @@ module Test.Tasty.Lens.Setter
     test
   , testSeries
   , testExhaustive
-  -- * Re-exports
-  , module Test.SmallCheck.Lens.Setter
   ) where
 
-import Control.Lens
-import Test.SmallCheck.Series (Serial(series), Series, localDepth)
-import Test.Tasty (TestTree, testGroup)
-import Test.Tasty.SmallCheck (testProperty)
+import Text.Show.Functions ()
 
-import Test.SmallCheck.Lens.Setter
-  ( identity
-  , setSet
-  , setSetSum
-  , composition
-  , compositionSum
+import Control.Lens
+import Test.Tasty (TestTree, testGroup)
+import Test.Tasty.DumbCheck
+  ( Serial(series)
+  , testSeriesProperty
+  , testSerialProperty
+  , Series
+  , uncurry3
   )
+
+import Control.Lens.Setter.Laws (identity, setSet, composition)
 
 -- | A 'Setter' is only legal if the following laws hold:
 --
@@ -42,10 +41,7 @@ import Test.SmallCheck.Lens.Setter
 -- In this case @f@ and @g@ are of type @a -> a@ and when combining them the
 -- /sum/ of 'Series' is used.
 test
-  :: ( Eq s, Show s, Show a
-     , Serial IO s
-     , Serial IO a, Serial Identity a, Serial IO (a -> a)
-     )
+  :: (Eq s, Show s, Show a , Serial s, Serial a)
   => Setter' s a -> TestTree
 test l = testSeries l series
 
@@ -64,17 +60,14 @@ test l = testSeries l series
 -- In this case @f@ and @g@ are of type @a -> a@ and when combining them the
 -- /sum/ of 'Series' is used.
 testSeries
-  :: ( Eq s, Show s, Show a
-     , Serial IO a, Serial Identity a, Serial IO (a -> a)
-     )
-  => Setter' s a -> Series IO s -> TestTree
+  :: (Eq s, Show s, Show a, Serial a)
+  => Setter' s a -> Series s -> TestTree
 testSeries l ss = testGroup "Setter Laws"
-  [ testProperty "over l id ≡ id" $ identity l ss
-  , testProperty "set l y (set l x a) ≡ set l y a" $
-      setSetSum l ss series series
-  , testProperty "over l f . over l g ≡ over l (f . g)" $
-      compositionSum l ss (localDepth (const 2) series)
-                          (localDepth (const 2) series)
+  [ testSeriesProperty "over l id ≡ id" (identity l) ss
+  , testSeriesProperty "set l y (set l x a) ≡ set l y a"
+      (uncurry3 $ setSet l) (zip3 ss series series)
+  , testSeriesProperty "over l f . over l g ≡ over l (f . g)"
+      (uncurry3 $ composition l) (zip3 ss series series)
   ]
 
 -- | A 'Setter' is only legal if the following laws hold:
@@ -88,15 +81,12 @@ testSeries l ss = testGroup "Setter Laws"
 -- This is the same as 'test' except it uses the /product/ when combining the
 -- @f@ and @g@ 'Series'.
 testExhaustive
-  :: ( Eq s, Show s, Show a
-     , Serial IO s
-     , Serial IO a, Serial Identity a, Serial IO (a -> a)
-     )
+  :: (Eq s, Show s, Show a, Serial s, Serial a)
   => Setter' s a -> TestTree
 testExhaustive l = testGroup "Setter Laws"
-  [ testProperty "over l id ≡ id" $ identity l series
-  , testProperty "set l y (set l x a) ≡ set l y a" $
-      setSet l series series series
-  , testProperty "over l f . over l g ≡ over l (f . g)" $
-      composition l series series series
+  [ testSerialProperty "over l id ≡ id" (identity l)
+  , testSerialProperty "set l y (set l x a) ≡ set l y a"
+      (uncurry3 $ setSet l)
+  , testSerialProperty "over l f . over l g ≡ over l (f . g)"
+      (uncurry3 $ composition l)
   ]

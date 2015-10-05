@@ -10,18 +10,15 @@ module Test.Tasty.Lens.Lens
     test
   , testSeries
   , testExhaustive
-  -- * Re-exports
-  , module Test.SmallCheck.Lens.Lens
   ) where
 
 import Data.Proxy (Proxy(..))
 
 import Control.Lens
-import Test.SmallCheck.Series (Serial(series), CoSerial, Series)
 import Test.Tasty (TestTree, testGroup)
-import Test.Tasty.SmallCheck (testProperty)
+import Test.Tasty.DumbCheck -- (testProperty)
 
-import Test.SmallCheck.Lens.Lens (setView, viewSet)
+import Control.Lens.Lens.Laws (setView, viewSet)
 import qualified Test.Tasty.Lens.Traversal as Traversal
 
 -- | A 'Lens'' is only legal if it's a valid 'Traversal'' and if the following
@@ -40,10 +37,7 @@ import qualified Test.Tasty.Lens.Traversal as Traversal
 -- This also uses "Test.Tasty.Lens.Traversal"@.@'Traversal.test', with the
 -- 'Maybe' functor, to validate the 'Lens'' is a valid 'Traversal''.
 test
-  :: ( Eq s, Eq a, Show s, Show a
-     , Serial IO s
-     , Serial IO a, Serial Identity a, CoSerial IO a
-     )
+  :: (Eq s, Eq a, Show s, Show a, Serial s, Serial a)
   => Lens' s a -> TestTree
 test l = testSeries l series
 
@@ -64,15 +58,14 @@ test l = testSeries l series
 -- the 'Maybe' functor and the custom @s@ 'Series', to validate the 'Lens'' is
 -- a valid 'Traversal''.
 testSeries
-  :: ( Eq s, Eq a, Show s, Show a
-     , Serial IO a, Serial Identity a, CoSerial IO a
-     )
-  => Lens' s a -> Series IO s -> TestTree
+  :: (Eq s, Eq a, Show s, Show a, Serial a)
+  => Lens' s a -> Series s -> TestTree
 testSeries l ss = testGroup "Lens Laws"
-  [ testProperty "view l (set l b a) ≡ b" $
-      setView l ss
-  , testProperty "set l (view l a) a ≡ a" $
-      viewSet l ss series
+  [ testSeriesProperty "view l (set l b a) ≡ b" (setView l) ss
+  , testSeriesProperty
+      "set l (view l a) a ≡ a"
+      (uncurry $ viewSet l)
+      (zip ss series)
   , Traversal.testSeries (Proxy :: Proxy Maybe) l ss
   ]
 
@@ -89,15 +82,10 @@ testSeries l ss = testGroup "Lens Laws"
 -- "Test.Tasty.Lens.Traversal"@.@'Traversal.testExhaustive' to validate
 -- 'Traversal'' laws. Be aware of combinatorial explosions.
 testExhaustive
-  :: ( Eq s, Eq a, Show s, Show a
-     , Serial IO s
-     , Serial IO a, Serial Identity a, CoSerial IO a
-     )
+  :: (Eq s, Eq a, Show s, Show a, Serial  s, Serial a)
   => Lens' s a -> TestTree
 testExhaustive l = testGroup "Lens Laws"
-  [ testProperty "view l (set l b a) ≡ b" $
-      setView l series
-  , testProperty "set l (view l a) a ≡ a" $
-      viewSet l series series
+  [ testSerialProperty "view l (set l b a) ≡ b" (setView l)
+  , testSerialProperty "set l (view l a) a ≡ a" (uncurry $ viewSet l)
   , Traversal.testExhaustive (Proxy :: Proxy Maybe) l
   ]

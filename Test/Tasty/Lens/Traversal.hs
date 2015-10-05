@@ -12,8 +12,6 @@ module Test.Tasty.Lens.Traversal
     test
   , testSeries
   , testExhaustive
-  -- * Re-exports
-  , module Test.SmallCheck.Lens.Traversal
   ) where
 
 #if !MIN_VERSION_base(4,8,0)
@@ -22,12 +20,11 @@ import Control.Applicative (Applicative)
 import Data.Proxy (Proxy(..))
 
 import Control.Lens
-import Test.SmallCheck.Series (Serial(series), CoSerial, Series, localDepth)
 import Test.Tasty (TestTree, testGroup)
-import Test.Tasty.SmallCheck (testProperty)
+import Test.Tasty.DumbCheck -- (testProperty)
 
-import qualified Test.SmallCheck.Lens.Traversal as Traversal
-import Test.SmallCheck.Lens.Traversal (composition, compositionSum)
+import qualified Control.Lens.Traversal.Laws as Traversal (pure)
+import Control.Lens.Traversal.Laws (composition)
 import qualified Test.Tasty.Lens.Setter as Setter
 
 -- | A 'Traversal'' is only legal if it is a valid 'Setter'' and if the
@@ -49,11 +46,10 @@ import qualified Test.Tasty.Lens.Setter as Setter
 -- 'Traversal'' is a valid 'Setter''.
 test
   :: forall f s a .
-     ( Applicative f 
+     ( Applicative f
      , Eq s, Eq (f s), Eq (f (f s))
      , Show s, Show a, Show (f a)
-     , Serial IO s
-     , Serial Identity a, Serial IO a, Serial IO (f a), CoSerial IO a
+     , Serial s, Serial a, Serial (f a)
      )
   => Proxy f -> Traversal' s a -> TestTree
 test p t = testSeries p t series
@@ -77,17 +73,19 @@ test p t = testSeries p t series
 -- 'Traversal'' is a valid 'Setter''.
 testSeries
   :: forall f s a .
-     ( Applicative f 
+     ( Applicative f
      , Eq s, Eq (f s), Eq (f (f s))
-     , Show s, Show a, Show (f a)
-     , Serial Identity a, Serial IO a, Serial IO (f a), CoSerial IO a
+     , Show s, Show a
+     , Serial a, Serial (f a)
      )
-  => Proxy f -> Traversal' s a -> Series IO s -> TestTree
+  => Proxy f -> Traversal' s a -> Series s -> TestTree
 testSeries p t ss = testGroup "Traversal Laws"
-  [ testProperty "t pure ≡ pure" $ Traversal.pure p t ss
-  , testProperty "fmap (t f) . t g ≡ getCompose . t (Compose . fmap f . g)" $
-       compositionSum t ss (localDepth (const 2) $ series :: Series IO (a -> f a))
-                           (localDepth (const 2) $ series :: Series IO (a -> f a))
+  [ testSeriesProperty "t pure ≡ pure" (Traversal.pure p t) ss
+  , testSeriesProperty
+      "fmap (t f) . t g ≡ getCompose . t (Compose . fmap f . g)"
+      (uncurry3 $ composition t)
+      (zip3 ss (series :: Series (a -> f a))
+               (series :: Series (a -> f a)))
   , Setter.testSeries t ss
   ]
 
@@ -104,17 +102,19 @@ testSeries p t ss = testGroup "Traversal Laws"
 -- to validate 'Setter'' laws. Be aware of combinatorial explosions.
 testExhaustive
   :: forall f s a .
-     ( Applicative f 
+     ( Applicative f
      , Eq s, Eq (f s), Eq (f (f s))
      , Show s, Show a, Show (f a)
-     , Serial IO s
-     , Serial Identity a, Serial IO a, Serial IO (f a), CoSerial IO a
+     , Serial s, Serial a, Serial (f a)
      )
   => Proxy f -> Traversal' s a -> TestTree
 testExhaustive p t = testGroup "Traversal Laws"
-  [ testProperty "t pure ≡ pure" $ Traversal.pure p t series
-  , testProperty "fmap (t f) . t g ≡ getCompose . t (Compose . fmap f . g)" $
-       composition t series (series :: Series IO (a -> f a))
-                            (series :: Series IO (a -> f a))
+  [ testSerialProperty "t pure ≡ pure" (Traversal.pure p t)
+  , testSeriesProperty
+      "fmap (t f) . t g ≡ getCompose . t (Compose . fmap f . g)"
+      (uncurry3 $ composition t)
+      (zipA3 series
+             (series :: Series (a -> f a))
+             (series :: Series (a -> f a)))
   , Setter.testExhaustive t
   ]

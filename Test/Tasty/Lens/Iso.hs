@@ -10,16 +10,13 @@ module Test.Tasty.Lens.Iso
     test
   , testSeries
   , testExhaustive
-  -- * Re-exports
-  , module Test.SmallCheck.Lens.Iso
   ) where
 
 import Control.Lens
-import Test.SmallCheck.Series (Serial(series), CoSerial, Series)
 import Test.Tasty (TestTree, testGroup)
-import Test.Tasty.SmallCheck (testProperty)
+import Test.Tasty.DumbCheck -- (Serial(series), CoSerial, Series)
 
-import Test.SmallCheck.Lens.Iso (hither, yon)
+import Control.Lens.Iso.Laws (hither, yon)
 import qualified Test.Tasty.Lens.Lens as Lens
 
 -- | An 'Iso'' is only legal if the following laws hold:
@@ -35,12 +32,9 @@ import qualified Test.Tasty.Lens.Lens as Lens
 -- This uses "Test.Tasty.Lens.Lens"@.@'Lens.test' to validate the 'Iso'' is
 -- a valid 'Lens'' in both normal and reverse form.
 test
-  :: ( Eq s, Eq a, Show s, Show a
-     , Serial Identity s, Serial IO s, CoSerial IO s
-     , Serial Identity a, Serial IO a, CoSerial IO a
-     )
+  :: ( Eq s, Eq a, Show s, Show a, Serial s, Serial a)
   => Iso' s a -> TestTree
-test l = testSeries l series series
+test = testExhaustive
 
 -- | An 'Iso'' is only legal if the following laws hold:
 --
@@ -58,14 +52,11 @@ test l = testSeries l series series
 -- 'Series' for @s@ and @a@, to validate the 'Iso'' is a valid 'Lens'' in both
 -- normal and reverse form.
 testSeries
-  :: ( Eq s, Eq a, Show s, Show a
-     , Serial Identity s, Serial IO s, CoSerial IO s
-     , Serial Identity a, Serial IO a, CoSerial IO a
-     )
-  => Iso' s a -> Series IO s -> Series IO a -> TestTree
+  :: (Eq s, Eq a, Show s, Show a, Serial s, Serial a)
+  => Iso' s a -> Series s -> Series a -> TestTree
 testSeries l ss as = testGroup "Iso Laws"
-  [ testProperty "s ^. l . from l ≡ s" $ hither l ss
-  , testProperty "s ^. from l . l ≡ s" $ yon l as
+  [ testSeriesProperty "s ^. l . from l ≡ s" (hither l) ss
+  , testSeriesProperty "s ^. from l . l ≡ s" (yon l) as
   , Lens.testSeries l ss
   , Lens.testSeries (from l) as
   ]
@@ -80,14 +71,11 @@ testSeries l ss as = testGroup "Iso Laws"
 -- "Test.Tasty.Lens.Lens"@.@'Lens.testExhaustive' to validate the 'Lens'' laws.
 -- Be aware of combinatorial explosions.
 testExhaustive
-  :: ( Eq s, Eq a, Show s, Show a
-     , Serial Identity s, Serial IO s, CoSerial IO s
-     , Serial Identity a, Serial IO a, CoSerial IO a
-     )
+  :: (Eq s, Eq a, Show s, Show a, Serial s, Serial a)
   => Iso' s a -> TestTree
 testExhaustive l = testGroup "Iso Laws"
-  [ testProperty "s ^. l . from l ≡ s" $ hither l series
-  , testProperty "s ^. from l . l ≡ s" $ yon l series
+  [ testSerialProperty "s ^. l . from l ≡ s" (hither l)
+  , testSerialProperty "s ^. from l . l ≡ s" (yon l)
   , Lens.testExhaustive l
   , Lens.testExhaustive (from l)
   ]

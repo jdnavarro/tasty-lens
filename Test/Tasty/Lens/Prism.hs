@@ -10,18 +10,15 @@ module Test.Tasty.Lens.Prism
     test
   , testSeries
   , testExhaustive
-  -- * Re-exports
-  , module Test.SmallCheck.Lens.Prism
   ) where
 
 import Data.Proxy (Proxy(..))
 
 import Control.Lens
-import Test.SmallCheck.Series (Serial(series), Series, CoSerial)
 import Test.Tasty (TestTree, testGroup)
-import Test.Tasty.SmallCheck (testProperty)
+import Test.Tasty.DumbCheck -- (testProperty)
 
-import Test.SmallCheck.Lens.Prism (yin, yang)
+import Control.Lens.Prism.Laws (yin, yang)
 import qualified Test.Tasty.Lens.Traversal as Traversal
 
 -- | A 'Prism'' is only legal if it's a valid 'Traversal'' and if the following
@@ -38,10 +35,7 @@ import qualified Test.Tasty.Lens.Traversal as Traversal
 -- This also uses "Test.Tasty.Lens.Traversal"@.@'Traversal.test', with the
 -- 'Maybe' functor, to validate the 'Prism'' is a valid 'Traversal''.
 test
-  :: ( Eq s, Eq a, Show s, Show a
-     , Serial IO s
-     , Serial IO a, Serial Identity a, CoSerial IO a
-     )
+  :: (Eq s, Eq a, Show s, Show a, Serial s, Serial a)
   => Prism' s a -> TestTree
 test l = testSeries l series
 
@@ -60,13 +54,11 @@ test l = testSeries l series
 -- the 'Maybe' functor and the custom @s@ 'Series', to validate the 'Prism'' is
 -- a valid 'Traversal''.
 testSeries
-  :: ( Eq s, Eq a, Show s, Show a
-     , Serial IO a, Serial Identity a, CoSerial IO a
-     )
-  => Prism' s a -> Series IO s -> TestTree
+  :: (Eq s, Eq a, Show s, Show a, Serial a)
+  => Prism' s a -> Series s -> TestTree
 testSeries l ss = testGroup "Prism Laws"
-  [ testProperty "preview l (review l b) ≡ Just b" $ yin l series
-  , testProperty "maybe s (review l) (preview l s) ≡ s" $ yang l ss
+  [ testSerialProperty "preview l (review l b) ≡ Just b" (yin l)
+  , testSeriesProperty "maybe s (review l) (preview l s) ≡ s" (yang l) ss
   , Traversal.testSeries (Proxy :: Proxy Maybe) l ss
   ]
 
@@ -82,12 +74,11 @@ testSeries l ss = testGroup "Prism Laws"
 -- 'Traversal'' laws. Be aware of combinatorial explosions.
 testExhaustive
   :: ( Eq s, Eq a, Show s, Show a
-     , Serial IO s
-     , Serial IO a, Serial Identity a, CoSerial IO a
+     , Serial s, Serial a
      )
   => Prism' s a -> TestTree
 testExhaustive l = testGroup "Prism Laws"
-  [ testProperty "preview l (review l b) ≡ Just b" $ yin l series
-  , testProperty "maybe s (review l) (preview l s) ≡ s" $ yang l series
+  [ testSerialProperty "preview l (review l b) ≡ Just b" (yin l)
+  , testSerialProperty "maybe s (review l) (preview l s) ≡ s" (yang l)
   , Traversal.testExhaustive (Proxy :: Proxy Maybe) l
   ]

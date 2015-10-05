@@ -1,7 +1,10 @@
 flags: {}
 packages:
 - '.'
+- 'lens-laws'
+- 'tasty-dumbcheck'
+- 'tasty-expected-failure'
 extra-deps:
-- smallcheck-lens-0.3
-- smallcheck-series-0.5.1
+- tasty-0.11.0.1
+- tasty-expected-failure-0.11.0.1
 resolver: lts-2.22

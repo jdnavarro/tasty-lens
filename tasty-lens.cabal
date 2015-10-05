@@ -29,10 +29,9 @@ library
                        Test.Tasty.Lens.Traversal
   build-depends:       base >=4.6 && <4.9,
                        lens >=4.1.2.1,
-                       smallcheck >=1.1.1,
-                       smallcheck-lens >=0.3,
+                       lens-laws,
                        tasty >=0.10,
-                       tasty-smallcheck >=0.8.0.1
+                       tasty-dumbcheck
   if impl(ghc < 7.8)
      build-depends: tagged >=0.7.2
 
@@ -45,4 +44,6 @@ test-suite tasty
   build-depends:       base >= 4.6 && <4.9,
                        lens >=4.1.2.1,
                        tasty >=0.10,
+                       tasty-dumbcheck,
+                       tasty-expected-failure,
                        tasty-lens
