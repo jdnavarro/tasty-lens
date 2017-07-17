@@ -27,7 +27,7 @@ library
                        Test.Tasty.Lens.Prism
                        Test.Tasty.Lens.Setter
                        Test.Tasty.Lens.Traversal
-  build-depends:       base >=4.6 && <4.9,
+  build-depends:       base >=4.6 && <4.10,
                        lens >=4.1.2.1,
                        lens-laws,
                        tasty >=0.10,
